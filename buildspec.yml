@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 034362047542.dkr.ecr.us-west-2.amazonaws.com
+  build:
+    commands:
+      - echo Building the Docker image...
+      - docker build -t tic-tac-toe .
+      - docker tag tic-tac-toe:latest 034362047542.dkr.ecr.us-west-2.amazonaws.com/tic-tac-toe:latest
+  post_build:
+    commands:
+      - echo Pushing the Docker image...
+      - docker push 034362047542.dkr.ecr.us-west-2.amazonaws.com/tic-tac-toe:latest
+
+artifacts:
+  files: []
